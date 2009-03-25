@@ -14,7 +14,6 @@ def with_gem(gemname, &blk)
 end
 
 with_gem 'echoe' do
-
   Echoe.new('dm-tokyotyrant-adapter',
             DataMapper::Adapters::TokyoTyrantAdapter::VERSION) do |p|
     
@@ -25,4 +24,29 @@ with_gem 'echoe' do
     p.development_dependencies = ['rspec', 'echoe', 'yard']
   end
 end
+
+with_gem 'spec/rake/spectask' do
+  
+  desc 'Run all specs'
+  Spec::Rake::SpecTask.new(:spec) do |t|
+    t.spec_opts << '--options' << 'spec/spec.opts' if File.exists?('spec/spec.opts')
+    t.libs << 'lib'
+    t.spec_files = FileList['spec/**_spec.rb'] 
+  end
+
+  desc 'Default: Run Specs'
+  task :default => :spec
+
+  desc 'Run all tests'
+  task :test => :spec
+
+end
+
+with_gem 'yard' do
+  desc "Generate Yardoc"
+  YARD::Rake::YardocTask.new do |t|
+    t.files = ['lib/**/*.rb', 'README.markdown']
+  end
+end
+
 
