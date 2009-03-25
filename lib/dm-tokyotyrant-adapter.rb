@@ -25,6 +25,20 @@ module DataMapper::Adapters
       @db = RDB::new
     end
 
+    def create(records)
+      db do |db|
+        records.each do |record|
+          model = record.model
+          if identity_field = resource.model.identity_field(name)
+            identity_field.set!(resource, rand(2**32))
+          end
+          records[resource.key] = resource.attributes
+        end
+      end
+    end
+
+    protected
+
     def db(&blk)
       # connect to the server
       if !@db.open(options[:hostname], options[:port])
