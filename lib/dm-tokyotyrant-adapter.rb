@@ -28,6 +28,23 @@ module DataMapper::Adapters
       @db = RDB::new
     end
 
+    def db(&blk)
+      # connect to the server
+      if !@db.open(options[:hostname], options[:port])
+        ecode = @db.ecode
+        raise "Error opening connection to database: #{@db.errmsg(ecode)}"
+      end
+
+      result = yield @db
+
+      if !@db.close
+        ecode = @db.ecode
+        raise ConnectError, @db.errmsg(ecode)
+      end
+
+      result
+    end
+
     def create(resources)
       db do |db|
         resources.each do |resource|
@@ -94,23 +111,6 @@ module DataMapper::Adapters
         ecode = db.ecode
         raise WriteError, db.errmsg(ecode)
       end
-    end
-
-    def db(&blk)
-      # connect to the server
-      if !@db.open(options[:hostname], options[:port])
-        ecode = @db.ecode
-        raise "Error opening connection to database: #{@db.errmsg(ecode)}"
-      end
-
-      result = yield @db
-
-      if !@db.close
-        ecode = @db.ecode
-        raise ConnectError, @db.errmsg(ecode)
-      end
-
-      result
     end
 
     class ConnectError < StandardError

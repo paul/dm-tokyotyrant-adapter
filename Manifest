@@ -1,4 +1,8 @@
+Manifest
+spec/spec.opts
+spec/dm-tokyotyrant-adapter_spec.rb
+spec/spec_helper.rb
 README.markdown
 lib/dm-tokyotyrant-adapter.rb
 Rakefile
-Manifest
+spec.tcb
