@@ -17,11 +17,11 @@ module DataMapper::Adapters
     def initialize(name, options)
       super
 
-      @options[:hostname] ||= 'localhost'
-      @options[:port]     ||= 1978
-      @options[:database] ||= :btree
+      @hostname ||= 'localhost'
+      @port     ||= 1978
+      @database ||= :btree
 
-      unless DATABASE_TYPES.include?(@options[:database].to_s)
+      unless DATABASE_TYPES.include?(@database.to_s)
         raise ":database option must be one of #{DATABASE_TYPES.inspect}. Defaults to btree"
       end
 
@@ -30,7 +30,7 @@ module DataMapper::Adapters
 
     def db(&blk)
       # connect to the server
-      if !@db.open(options[:hostname], options[:port])
+      if !@db.open(@hostname, @port)
         ecode = @db.ecode
         raise "Error opening connection to database: #{@db.errmsg(ecode)}"
       end
@@ -64,7 +64,7 @@ module DataMapper::Adapters
           value = db.get(key)
           records << deserialize(value) if value
         end
-        filter_records(records, query)
+        query.filter_records(records)
       end
     end
 
