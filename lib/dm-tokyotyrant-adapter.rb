@@ -17,9 +17,8 @@ module DataMapper::Adapters
     def initialize(name, options)
       super
 
-      @hostname ||= 'localhost'
-      @port     ||= 1978
-      @database ||= :btree
+      @hostname = @options[:hostname] || 'localhost'
+      @port     = @options[:port]     || 1978
 
       unless DATABASE_TYPES.include?(@database.to_s)
         raise ":database option must be one of #{DATABASE_TYPES.inspect}. Defaults to btree"

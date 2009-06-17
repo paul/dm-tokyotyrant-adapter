@@ -6,3 +6,4 @@ README.markdown
 lib/dm-tokyotyrant-adapter.rb
 Rakefile
 spec.tcb
+dm-tokyotyrant-adapter.gemspec
