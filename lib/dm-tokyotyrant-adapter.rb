@@ -12,17 +12,12 @@ module DataMapper::Adapters
     include TokyoTyrant
 
     VERSION = '0.1.0'.freeze
-    DATABASE_TYPES = %w{hash btree fixed table}
 
     def initialize(name, options)
       super
 
       @hostname = @options[:hostname] || 'localhost'
       @port     = @options[:port]     || 1978
-
-      unless DATABASE_TYPES.include?(@database.to_s)
-        raise ":database option must be one of #{DATABASE_TYPES.inspect}. Defaults to btree"
-      end
 
       @db = RDB::new
     end
