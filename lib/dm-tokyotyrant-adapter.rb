@@ -29,11 +29,13 @@ module DataMapper::Adapters
         raise "Error opening connection to database: #{@db.errmsg(ecode)}"
       end
 
-      result = yield @db
-
-      if !@db.close
-        ecode = @db.ecode
-        raise ConnectError, @db.errmsg(ecode)
+      begin
+        result = yield @db
+      ensure
+        if !@db.close
+          ecode = @db.ecode
+          raise ConnectError, @db.errmsg(ecode)
+        end
       end
 
       result
